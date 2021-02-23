@@ -2,11 +2,19 @@ import React, { Component } from "react";
 import axios from "axios";
 
 export default class PlantList extends Component {
+  SERVER_URL = "http://localhost:3333";
   // add state with a property called "plants" - initialize as an empty array
+  constructor() {
+    super();
+    this.state = { plants: [] };
+  }
 
   // when the component mounts:
   //   - fetch data from the server endpoint - http://localhost:3333/plants
   //   - set the returned plants array to this.state.plants
+  componentDidMount() {
+    this.fetchPlants(this.SERVER_URL);
+  }
 
   /*********  DON'T CHANGE ANYTHING IN THE RENDER FUNCTION *********/
   render() {
@@ -36,4 +44,15 @@ export default class PlantList extends Component {
       </main>
     );
   }
+
+  fetchPlants = (baseUrl) => {
+    axios
+      .get(`${baseUrl}/plants`)
+      .then((res) => {
+        this.setState({ ...this.state, plants: res.data.plantsData });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 }
